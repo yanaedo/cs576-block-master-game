@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3796745520352845898}
-  m_Layer: 6
-  m_Name: Enemy Blocker
+  m_Layer: 8
+  m_Name: Key Blocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3578636122725506587}
   - component: {fileID: 6102140453579246194}
   - component: {fileID: 469498780056418282}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 96bf07a3ebae14596bce2150006c62a9, type: 2}
+  - {fileID: 2100000, guid: 699357b01cd6f43bdac7e71d60fcec0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

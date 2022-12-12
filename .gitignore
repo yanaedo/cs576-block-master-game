@@ -60,3 +60,6 @@ crashlytics-build.properties
 
 # Ignore Mac folder data
 **/.DS_Store
+
+# Ignore user window size settings
+**/UserSettings/Layouts/default-2021.dwlt

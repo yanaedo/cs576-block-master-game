@@ -17,7 +17,7 @@ public class Claire : MonoBehaviour {
 
     public float pickup_range;
     private float pickup_force;
-    private float object_rotation;
+    public float object_rotation = 15f;
     public Transform holdArea;
     private GameObject held_object;
     private Rigidbody  held_object_RB;
@@ -45,8 +45,9 @@ public class Claire : MonoBehaviour {
             };
 
         pickup_range = 15f;
+        // Note from Griffin: Probably want to limit the max range on this more eventually, since seems pretty far currently (like, enough that you can grab a cube and have it be stuck behind a wall on its way to the player). Maybe should be range from player character rather than from camera which I think is what it currently is
         pickup_force = 75f;
-        object_rotation = 15f; //45 degrees = 8 positions per axis
+        // object_rotation = 15f; //45 degrees = 8 positions per axis //Griffin: commented out so I can move this to be set as a public variable and be more flexible
     }
 
     // Update is called once per frame
@@ -106,8 +107,9 @@ public class Claire : MonoBehaviour {
                 held_object = pickup_obj;
 
                 // Shrink the object when we pick it up
-                Vector3 scale = held_object.transform.localScale;
-                held_object.transform.localScale = new Vector3(scale.x * 2 / 3, scale.y * 2 / 3, scale.z * 2 / 3);
+                //Griffin: disabling this because I want key to be same size as hole it's being lined up with
+                // Vector3 scale = held_object.transform.localScale;
+                // held_object.transform.localScale = new Vector3(scale.x * 2 / 3, scale.y * 2 / 3, scale.z * 2 / 3);
             }
         }
     }
@@ -118,8 +120,8 @@ public class Claire : MonoBehaviour {
         held_object_RB.constraints = RigidbodyConstraints.None;
 
         // Grow the object when we drop it
-        Vector3 scale = held_object.transform.localScale;
-        held_object.transform.localScale = new Vector3(scale.x * 3 / 2, scale.y * 3 / 2, scale.z * 3 / 2);
+        // Vector3 scale = held_object.transform.localScale;
+        // held_object.transform.localScale = new Vector3(scale.x * 3 / 2, scale.y * 3 / 2, scale.z * 3 / 2);
 
         held_object_RB.transform.parent = null;
         held_object = null;
@@ -131,7 +133,9 @@ public class Claire : MonoBehaviour {
             // holding button (1 push = 1 degree)
             // continuous steps (physics - AddTorque)
                 // https://docs.unity3d.com/ScriptReference/Rigidbody.AddTorque.html
-
+        //Note from Griffin: Currently triggers on every frame but has object_rotation = 15f which means it seems to turn very fast; just going to lower that value for now, so I can test the inserting into slots, not sure which setup you prefer/intend. I think also if possible, clicking and dragging could be a good control method since that'd give better precision
+        //                   Personally I think snapping to angles maybe only when the player releases the rotation controls could work? So it'd rotate slower/smoother but then when the player stops pressing the button it'd go into position
+        //                   Also maybe shouldn't rotate with the player's movement if it's going to snap to angles, as otherwise need player to line up their character as well as the key, which is kind of difficult when controlling player turning with arrow keys (could also do mouse control for player rotation and that'd resolve the issue as it'd be more precise regardless)
         Vector3 rotata = new Vector3();
         bool rotate_x_left   = Input.GetKey(KeyCode.Y);
         bool rotate_x_right  = Input.GetKey(KeyCode.U);

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Key
   - Cube Key
+  - Key 1
   layers:
   - Default
   - TransparentFX

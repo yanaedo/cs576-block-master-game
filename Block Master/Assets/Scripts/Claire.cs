@@ -174,7 +174,7 @@ public class Claire : MonoBehaviour {
         // Get the relevant keys pressed to determine type of movement
         bool forwards_key  = Input.GetKey(KeyCode.UpArrow);
         bool backwards_key = Input.GetKey(KeyCode.DownArrow);
-        bool running_key   = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl);
+        bool running_key   = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
         bool jumping_key   = Input.GetKey(KeyCode.Space);
 
         // type of movement is determined hierarachaly from highest state (jumping) to lowest state (idle)

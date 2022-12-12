@@ -21,10 +21,12 @@ public class Claire : MonoBehaviour {
     public Transform holdArea;
     private GameObject held_object;
     private Rigidbody  held_object_RB;
+    private Rigidbody  claire_RB;
 
     // TODO: try to get this programatically
     // Knowing the script is attached to claire, and she has a camera object in her hierarchy
     public Camera _camera;
+    public Camera _key_camera; 
 
 	// Use this for initialization
 	void Start ()
@@ -47,6 +49,14 @@ public class Claire : MonoBehaviour {
         pickup_range = 15f;
         pickup_force = 75f;
         object_rotation = 15f; //45 degrees = 8 positions per axis
+
+        _camera.enabled = true;
+        _key_camera.enabled = false;
+
+        claire_RB = gameObject.GetComponent(typeof(Rigidbody)) as Rigidbody;
+        if (claire_RB == null) {
+            Debug.Log("You may have deleted Claire's Rigid Body");
+        }
     }
 
     // Update is called once per frame
@@ -56,7 +66,7 @@ public class Claire : MonoBehaviour {
         // Move:    UpArrow, DownArrow
         // Rotate:  LeftArrow, RightArrow
         // Actions: Control (run), Space (jump)
-        handleMovement();
+        HandleMovement();
 
         // Handle picking up, and dropping a key
         // Pickup:   LeftClick
@@ -67,22 +77,26 @@ public class Claire : MonoBehaviour {
             DropKey();
         }
 
-        // If we have a held object, move it to the desired position
+        // // If we have a held object, move it to the desired position
         if (held_object != null && Vector3.Distance(held_object.transform.position, holdArea.position) > 0.1f) {
             Vector3 moveDirection = (holdArea.position - held_object.transform.position);
             held_object_RB.AddForce(moveDirection * pickup_force);
         }
 
-        // Handle Rotating Keys
-        // TODO: find a better mapping
-        // axis:        (x) (y) (z)
-        // Rotate Left:  Y,  H,  N
-        // Rotate Right: U,  J,  M
+        // // Handle Rotating Keys
+        // // TODO: map to mouse movements
+        // // axis:        (x) (y) (z)
+        // // Rotate Left:  W,  A,  Q
+        // // Rotate Right: S,  D,  E
         if (held_object != null) {
-            RotateKey();
+            HandleRotateKey();
         }
-        
 
+        // // Switch the camera
+        if (held_object != null && Input.GetKey(KeyCode.C)) {
+            _camera.enabled = !_camera.enabled;
+            _key_camera.enabled = !_key_camera.enabled;
+        }
     }
 
     void TryPickupKey() {
@@ -106,8 +120,8 @@ public class Claire : MonoBehaviour {
                 held_object = pickup_obj;
 
                 // Shrink the object when we pick it up
-                Vector3 scale = held_object.transform.localScale;
-                held_object.transform.localScale = new Vector3(scale.x * 2 / 3, scale.y * 2 / 3, scale.z * 2 / 3);
+                // Vector3 scale = held_object.transform.localScale;
+                // held_object.transform.localScale = new Vector3(scale.x * 2 / 3, scale.y * 2 / 3, scale.z * 2 / 3);
             }
         }
     }
@@ -118,14 +132,18 @@ public class Claire : MonoBehaviour {
         held_object_RB.constraints = RigidbodyConstraints.None;
 
         // Grow the object when we drop it
-        Vector3 scale = held_object.transform.localScale;
-        held_object.transform.localScale = new Vector3(scale.x * 3 / 2, scale.y * 3 / 2, scale.z * 3 / 2);
+        // Vector3 scale = held_object.transform.localScale;
+        // held_object.transform.localScale = new Vector3(scale.x * 3 / 2, scale.y * 3 / 2, scale.z * 3 / 2);
 
         held_object_RB.transform.parent = null;
         held_object = null;
+
+        // Back to the 3rd person view
+        _camera.enabled = true;
+        _key_camera.enabled = false;
     }
 
-    void RotateKey() {
+    void HandleRotateKey() {
         // Could do this with
             // pushing button (1 push = 45 degrees)
             // holding button (1 push = 1 degree)
@@ -133,12 +151,12 @@ public class Claire : MonoBehaviour {
                 // https://docs.unity3d.com/ScriptReference/Rigidbody.AddTorque.html
 
         Vector3 rotata = new Vector3();
-        bool rotate_x_left   = Input.GetKey(KeyCode.Y);
-        bool rotate_x_right  = Input.GetKey(KeyCode.U);
-        bool rotate_y_left   = Input.GetKey(KeyCode.H);
-        bool rotate_y_right  = Input.GetKey(KeyCode.J);
-        bool rotate_z_left   = Input.GetKey(KeyCode.N);
-        bool rotate_z_right  = Input.GetKey(KeyCode.M);
+        bool rotate_x_left   = Input.GetKey(KeyCode.W);
+        bool rotate_x_right  = Input.GetKey(KeyCode.S);
+        bool rotate_y_left   = Input.GetKey(KeyCode.A);
+        bool rotate_y_right  = Input.GetKey(KeyCode.D);
+        bool rotate_z_left   = Input.GetKey(KeyCode.Q);
+        bool rotate_z_right  = Input.GetKey(KeyCode.E);
 
         // Handle X rotation
         if (rotate_x_left) {
@@ -161,12 +179,13 @@ public class Claire : MonoBehaviour {
             rotata.z = -1 * object_rotation;
         }
 
-        // Rotate in world/global space
-        // because its a lot easier to visualize than local space (local to the key)
-        held_object.transform.Rotate( rotata , Space.World);
+        // Rotate in world/global space relative to the rotation of Claire
+        // This ensures a rotation always occurs on the key's intial axes
+        Vector3 relative = transform.InverseTransformDirection(rotata);
+        held_object.transform.Rotate( relative , Space.World);
     }
 
-    void handleMovement() {
+    void HandleMovement() {
         // Get the relevant keys pressed to determine type of movement
         bool forwards_key  = Input.GetKey(KeyCode.UpArrow);
         bool backwards_key = Input.GetKey(KeyCode.DownArrow);
@@ -243,7 +262,7 @@ public class Claire : MonoBehaviour {
         // (changing transform's position does not make these checks)
         if (transform.position.y > 0.0f) { // if the character starts "climbing" the terrain, drop her down
             Vector3 lower_character = movement_direction * velocity * Time.deltaTime;
-            lower_character.y = -100f; // hack to force her down, doesn't work with jumping to a height
+            // lower_character.y = -100f; // hack to force her down, doesn't work with jumping to a height
             character_controller.Move(lower_character);
         } else {
             character_controller.Move(movement_direction * velocity * Time.deltaTime);

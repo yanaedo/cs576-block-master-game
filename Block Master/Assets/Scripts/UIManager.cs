@@ -45,13 +45,11 @@ public class UIManager : MonoBehaviour
             if (curPage.name == "InstructionsBox")
             {
                 curPage.SetActive(false);
-                //GameObject nextPage = GameObject.Find("ClaireControlsBox");
                 claireControlsBox.SetActive(true);
             } 
             else if (curPage.name == "ClaireControlsBox")
             {
                 curPage.SetActive(false);
-                //GameObject nextPage = GameObject.Find("KeysControlsBox");
                 keysControlsBox.SetActive(true);
             }
     }
@@ -61,13 +59,11 @@ public class UIManager : MonoBehaviour
         if (curPage.name == "ClaireControlsBox")
         {
             curPage.SetActive(false);
-            //GameObject prevPage = GameObject.Find("InstructionsBox");
             introIntructionsBox.SetActive(true);
         }
         else if (curPage.name == "KeysControlsBox")
         {
             curPage.SetActive(false);
-            //GameObject prevPage = GameObject.Find("ClaireControlsBox");
             claireControlsBox.SetActive(true);
         }
     }

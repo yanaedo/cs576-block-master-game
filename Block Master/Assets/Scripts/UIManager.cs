@@ -8,23 +8,25 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     public AudioMixer audioMix;
-    public GameObject fullscreenToggle;
     private GameObject instructionsDialog;
     private GameObject settingsDialog;
+    private GameObject introIntructionsBox;
+    private GameObject claireControlsBox;
+    private GameObject keysControlsBox;
 
     // Start is called before the first frame update
     void Start()
     {
+        //find instructions and settings dialog boxes and hide them in the scene immediately
+        introIntructionsBox = GameObject.Find("InstructionsBox");
+        claireControlsBox = GameObject.Find("ClaireControlsBox");
+        claireControlsBox.SetActive(false);
+        keysControlsBox = GameObject.Find("KeysControlsBox");
+        keysControlsBox.SetActive(false);
         instructionsDialog = GameObject.Find("InstructionsContainer");
         instructionsDialog.SetActive(false);
         settingsDialog = GameObject.Find("SettingsContainer");
         settingsDialog.SetActive(false);
-        UnityEngine.UI.Toggle toggle = fullscreenToggle.GetComponent<UnityEngine.UI.Toggle>();
-
-        ColorBlock colors = toggle.colors;
-            colors.normalColor = new Color(255, 174, 47, 1);
-            toggle.colors = colors;
-       
     }
 
     // Update is called once per frame
@@ -38,7 +40,39 @@ public class UIManager : MonoBehaviour
         dialog.SetActive(!dialog.activeSelf);
     }
 
-    public void setBackgroundVolume(float volume)
+    public void pageTurnerNext(GameObject curPage)
+    {
+            if (curPage.name == "InstructionsBox")
+            {
+                curPage.SetActive(false);
+                //GameObject nextPage = GameObject.Find("ClaireControlsBox");
+                claireControlsBox.SetActive(true);
+            } 
+            else if (curPage.name == "ClaireControlsBox")
+            {
+                curPage.SetActive(false);
+                //GameObject nextPage = GameObject.Find("KeysControlsBox");
+                keysControlsBox.SetActive(true);
+            }
+    }
+
+    public void pageTurnerPrev(GameObject curPage)
+    {
+        if (curPage.name == "ClaireControlsBox")
+        {
+            curPage.SetActive(false);
+            //GameObject prevPage = GameObject.Find("InstructionsBox");
+            introIntructionsBox.SetActive(true);
+        }
+        else if (curPage.name == "KeysControlsBox")
+        {
+            curPage.SetActive(false);
+            //GameObject prevPage = GameObject.Find("ClaireControlsBox");
+            claireControlsBox.SetActive(true);
+        }
+    }
+
+public void setBackgroundVolume(float volume)
     {
         audioMix.SetFloat("backgroundMusicVolume", volume);
     }
@@ -48,30 +82,14 @@ public class UIManager : MonoBehaviour
         audioMix.SetFloat("gameSoundsVolume", volume);
     }
 
-    public void setQuality(int qualityIndex)
+    public void setQuality(int quality)
     {
-        QualitySettings.SetQualityLevel(qualityIndex);
+        QualitySettings.SetQualityLevel(quality);
     }
 
     public void setFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
-    }
-
-    public void changeButtonColor()
-    {
-        /*ColorBlock colors = fullscreenToggle.colors;
-
-        if (fullscreenToggle.isOn)
-        {
-            colors.normalColor = new Color(255, 174, 47);
-            fullscreenToggle.colors = colors;
-        }
-        else
-        {
-            colors.normalColor = new Color(255, 255, 255, 0.6f);
-            fullscreenToggle.colors = colors;
-        }*/
     }
 
     public void exitGame()

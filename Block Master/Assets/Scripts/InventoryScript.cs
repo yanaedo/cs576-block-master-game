@@ -122,8 +122,8 @@ public class InventoryScript : MonoBehaviour {
 
                 // Griffin: disabling this because I want key to be same size as hole it's being lined up with
                 // Shrink the object when we pick it up - opposite of "grow" in DropKey()
-                // Vector3 scale = held_object.transform.localScale;
-                // held_object.transform.localScale = new Vector3(scale.x * 2 / 3, scale.y * 2 / 3, scale.z * 2 / 3);
+                Vector3 scale = held_object.transform.localScale;
+                held_object.transform.localScale = new Vector3(scale.x * 0.9f, scale.y * 0.9f, scale.z * 0.9f);
             }
         }
     }
@@ -139,8 +139,8 @@ public class InventoryScript : MonoBehaviour {
         Physics.IgnoreCollision(player_collider, held_object.GetComponent<Collider>(), false);
 
         // Grow the object when we drop it - opposite of "shrink" in TryPickupKey()
-        // Vector3 scale = held_object.transform.localScale;
-        // held_object.transform.localScale = new Vector3(scale.x * 3 / 2, scale.y * 3 / 2, scale.z * 3 / 2);
+        Vector3 scale = held_object.transform.localScale;
+        held_object.transform.localScale = new Vector3(scale.x / 0.9f, scale.y / 0.9f, scale.z / 0.9f);
         
         held_object = null;
 

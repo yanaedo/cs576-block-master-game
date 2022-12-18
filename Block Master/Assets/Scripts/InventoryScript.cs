@@ -75,10 +75,12 @@ public class InventoryScript : MonoBehaviour {
 
             // Switch the camera (between character and key views) only if we have a key
             // If the held_object is ever null, we force 3rd person view in DropKey()
-            if (!cam_switched && Input.GetKey(switch_camera_key)) {
-                _camera.enabled = !_camera.enabled;
-                _key_camera.enabled = !_key_camera.enabled;
-                cam_switched = true;
+            if (Input.GetKey(switch_camera_key)) {
+                if (!cam_switched) {
+                    _camera.enabled = !_camera.enabled;
+                    _key_camera.enabled = !_key_camera.enabled;
+                    cam_switched = true;
+                }
             } else {
                 cam_switched = false;
             }

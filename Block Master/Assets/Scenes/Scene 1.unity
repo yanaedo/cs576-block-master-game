@@ -2798,7 +2798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goal: {fileID: 447839755}
   animation_controller: {fileID: 0}
-  walk_threshold: 0.2
+  walk_threshold: 0.01
 --- !u!43 &1609789203
 Mesh:
   m_ObjectHideFlags: 0

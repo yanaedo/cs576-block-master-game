@@ -28,6 +28,8 @@ public class InventoryScript : MonoBehaviour {
     [SerializeField] private LayerMask exclude_enemy_layermask;
     private AudioSource key_pickup_SE;
 
+    public bool using_main_camera = true;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -78,16 +80,29 @@ public class InventoryScript : MonoBehaviour {
 
                 // Switch the camera (between character and key views) only if we have a key
                 // If the held_object is ever null, we force 3rd person view in DropKey()
-                if (Input.GetKey(switch_camera_key)) {
-                    if (!cam_switched) {
-                        _camera.enabled = !_camera.enabled;
-                        _key_camera.enabled = !_key_camera.enabled;
-                        cam_switched = true;
-                    }
-                } else {
-                    cam_switched = false;
-                }
+                // if (Input.GetKey(switch_camera_key)) {
+                //     if (!cam_switched) {
+                //         _camera.enabled = !_camera.enabled;
+                //         _key_camera.enabled = !_key_camera.enabled;
+                //         cam_switched = true;
+                //     }
+                // } else {
+                //     cam_switched = false;
+                // }
 
+            }
+
+            // Switch the camera (between character and key views) only if we have a key
+            // If the held_object is ever null, we force 3rd person view in DropKey()
+            if (Input.GetKey(switch_camera_key)) {
+                if (!cam_switched) {
+                    _camera.enabled = !_camera.enabled;
+                    _key_camera.enabled = !_key_camera.enabled;
+                    using_main_camera = !using_main_camera;
+                    cam_switched = true;
+                }
+            } else {
+                cam_switched = false;
             }
 
         }
@@ -98,7 +113,13 @@ public class InventoryScript : MonoBehaviour {
         // Following this tutorial: https://www.youtube.com/watch?v=6bFCQqabfzo
 
         // Construct a ray from the current mouse coordinates
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        // Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray;
+        if (using_main_camera) {
+            ray = _camera.ScreenPointToRay(Input.mousePosition);
+        } else {
+            ray = _key_camera.ScreenPointToRay(Input.mousePosition);
+        }
         RaycastHit hit;
 
         // If we hit an object check if its a key
@@ -157,6 +178,7 @@ public class InventoryScript : MonoBehaviour {
         // Enforce 3rd person view
         _camera.enabled = true;
         _key_camera.enabled = false;
+        using_main_camera = true;
     }
 
     // Rotates the key based on mouse movement

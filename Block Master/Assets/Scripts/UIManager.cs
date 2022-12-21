@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     private GameObject introIntructionsBox;
     private GameObject claireControlsBox;
     private GameObject keysControlsBox;
+    private GameObject cameraControlsBox;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,8 @@ public class UIManager : MonoBehaviour
         claireControlsBox.SetActive(false);
         keysControlsBox = GameObject.Find("KeysControlsBox");
         keysControlsBox.SetActive(false);
+        cameraControlsBox = GameObject.Find("CameraControlsBox");
+        cameraControlsBox.SetActive(false);
         instructionsDialog = GameObject.Find("InstructionsContainer");
         instructionsDialog.SetActive(false);
         settingsDialog = GameObject.Find("SettingsContainer");
@@ -46,6 +49,11 @@ public class UIManager : MonoBehaviour
                 curPage.SetActive(false);
                 keysControlsBox.SetActive(true);
             }
+            else if (curPage.name == "KeysControlsBox")
+            {
+                curPage.SetActive(false);
+                cameraControlsBox.SetActive(true);
+            }
     }
 
     public void pageTurnerPrev(GameObject curPage)
@@ -59,6 +67,11 @@ public class UIManager : MonoBehaviour
         {
             curPage.SetActive(false);
             claireControlsBox.SetActive(true);
+        }
+        else if (curPage.name == "CameraControlsBox")
+        {
+            curPage.SetActive(false);
+            keysControlsBox.SetActive(true);
         }
     }
 

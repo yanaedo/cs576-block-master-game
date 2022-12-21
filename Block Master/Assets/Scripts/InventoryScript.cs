@@ -18,7 +18,7 @@ public class InventoryScript : MonoBehaviour {
     private Collider   player_collider;
 
     private Transform  holdArea;                     // Where the inventory is
-    private GameObject held_object;                  // What is in the inventory
+    public GameObject held_object;                  // What is in the inventory
     private Rigidbody  held_object_RB;               // The inventory's rigid body
     private Transform  held_object_prev_parent;      // Keeps track of the key's position in the scene hierarchy
     private KeyCode switch_camera_key; // Control key
@@ -163,6 +163,9 @@ public class InventoryScript : MonoBehaviour {
 
     // Removes the key from inventory and resets its default values
     public void DropKey() {
+        if (held_object == null) {
+            return;
+        }
         held_object_RB.useGravity = true;
         held_object_RB.drag = 1;
         held_object_RB.constraints = RigidbodyConstraints.None;

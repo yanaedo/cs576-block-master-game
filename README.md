@@ -35,5 +35,10 @@ Spencer:
 * Door texture: https://assetstore.unity.com/packages/2d/textures-materials/free-sample-materials-112184
 * Keyhole structure texture: https://assetstore.unity.com/packages/2d/textures-materials/wood/mc-old-wod-free-sample-178802
 
-* The fire particle system for the torches was taken from https://www.youtube.com/watch?v=5Mw6NpSEb2o&t=4s
+* The fire particle system for the torches was taken from https://www.youtube.com/watch?v=5Mw6NpSEb2o
 * The script FlickeringLight.cs which adds flickering lights to the fire was taken from https://assetstore.unity.com/packages/tools/particles-effects/flickering-light-effect-57324#content
+
+
+
+## Tutorial Followed
+* PICKUP & DROP Physics Objects in Unity (Like PORTAL): https://www.youtube.com/watch?v=6bFCQqabfzo

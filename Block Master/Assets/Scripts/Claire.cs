@@ -149,15 +149,6 @@ public class Claire : MonoBehaviour {
         // Can add a different types of force (ForceMode): 
         // Force, Acceleration, Impulse, or VelocityChange
 
-
-
-        // Add acceleration in the movement direction
-        // Once (forward) velocity reaches a threshold set 
-        // 
-        // 
-        // 
-        // 
-        // 
     }
 
     // Update is called once per frame

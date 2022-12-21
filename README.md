@@ -2,7 +2,7 @@
 
 ## Work Breakdown
 Tatyana:
-    ?
+* ?
 
 Griffin:
 * Implemented BlockKeys.cs, TrollAI.cs, TrollMace.cs, keyslot.cs, door.cs (except lines 12,13,18,20,30–33,36), and block_enemies.cs (unused)
@@ -10,10 +10,10 @@ Griffin:
 * Configured NavMesh and NavMeshAgents
 
 Spencer:
+* Worked on the Claire Gameobject, including the cameras and inventory objects, as well as the pause menu
+* Wrote Claire.cs, FollowCharacter.cs, inventoryScript.cs, and PauseScript.cs plus integrated them with the objects 
+* Added background music and sound effects
 
-    Worked on the Claire Gameobject, including the cameras and inventory objects, as well as the pause menu
-    Wrote Claire.cs, FollowCharacter.cs, inventoryScript.cs, and PauseScript.cs plus integrated them with the objects
-    Added background music and sound effects
 
 
 ## Assets

@@ -154,6 +154,8 @@ GameObject:
   - component: {fileID: 4882914989025602}
   - component: {fileID: 33407584003241822}
   - component: {fileID: 23221504225770740}
+  - component: {fileID: 7385454929748406998}
+  - component: {fileID: 7059073280035372325}
   m_Layer: 0
   m_Name: mace_low
   m_TagString: Untagged
@@ -226,6 +228,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7385454929748406998
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077419662316846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300014, guid: 34bf333920b9886469ea633c17e22d4d, type: 3}
+--- !u!114 &7059073280035372325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077419662316846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73e0f6e19516b4133b1f7a9249a13cba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1097627651781724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3199,6 +3227,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4876443625621520}
   - component: {fileID: 95309135661054092}
+  - component: {fileID: 9109017668481393834}
+  - component: {fileID: 2024078287467523929}
+  - component: {fileID: 2873771567112826272}
   m_Layer: 0
   m_Name: troll
   m_TagString: Untagged
@@ -3250,6 +3281,58 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!195 &9109017668481393834
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862107410815556}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 4
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 4
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &2024078287467523929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862107410815556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90c6d527d563f4bdabc2e8737cf16fe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goal: {fileID: 0}
+  animation_controller: {fileID: 0}
+  walk_threshold: 0.001
+  attacking: 0
+--- !u!136 &2873771567112826272
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862107410815556}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.7
+  m_Height: 3.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &1868828153997032
 GameObject:
   m_ObjectHideFlags: 0

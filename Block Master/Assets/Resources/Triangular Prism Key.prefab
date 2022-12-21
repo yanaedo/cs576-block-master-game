@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5913569838724807094}
   m_Layer: 9
-  m_Name: Key 2
+  m_Name: Triangular Prism Key
   m_TagString: Triangular Prism Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

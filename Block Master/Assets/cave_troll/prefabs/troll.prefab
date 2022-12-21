@@ -3319,6 +3319,8 @@ MonoBehaviour:
   animation_controller: {fileID: 0}
   walk_threshold: 0.001
   attacking: 0
+  key_detect_range: 40
+  no_key_detect_range: 8
 --- !u!136 &2873771567112826272
 CapsuleCollider:
   m_ObjectHideFlags: 0

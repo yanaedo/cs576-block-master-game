@@ -24,6 +24,7 @@ public class Claire : MonoBehaviour {
     // Used so player can pick up an object through the enemy barrier
     [SerializeField] private LayerMask exclude_enemy_layermask;
     
+    private AudioSource footsteps;
 
 	// Use this for initialization
 	void Start ()
@@ -31,6 +32,7 @@ public class Claire : MonoBehaviour {
         walking_velocity *= 10;
         jump_height *= 100;
         
+        footsteps = GetComponent<AudioSource>();
         animation_controller = GetComponent<Animator>();
         character_controller = GetComponent<CharacterController>();
 
@@ -59,7 +61,7 @@ public class Claire : MonoBehaviour {
         backwards_keys = new KeyCode[] {KeyCode.DownArrow,  KeyCode.S};
         left_keys      = new KeyCode[] {KeyCode.LeftArrow,  KeyCode.A};
         right_keys     = new KeyCode[] {KeyCode.RightArrow, KeyCode.D};
-        running_keys   = new KeyCode[] {KeyCode.RightControl, KeyCode.LeftControl, KeyCode.RightShift, KeyCode.LeftShift};
+        running_keys   = new KeyCode[] {KeyCode.RightShift, KeyCode.LeftShift};
 
         forwards  = false;
         backwards = false;
@@ -72,7 +74,9 @@ public class Claire : MonoBehaviour {
 
     void FixedUpdate() {
         // Moves the character forwards, and also handles jumping
-        HandleMovementRB();
+        if(!PauseScript.isPaused) {
+            HandleMovementRB();
+        }
     }
 
     // Implements a more RPG style movement using RigidBody
@@ -105,10 +109,28 @@ public class Claire : MonoBehaviour {
 
             // Make movement proportional to the elapsed time
             movement *= Time.deltaTime;
-            // But preserve the y-component (for jumping)
-            movement.y = claire_RB.velocity.y;
-            // Update the velocity
-            claire_RB.velocity = movement;
+            
+
+            // If claire isn't moving in a direction, 'accelerate' in that direction
+            float vx = Mathf.Pow(claire_RB.velocity.x, 2);
+            float vz = Mathf.Pow(claire_RB.velocity.z, 2);
+            float vel = Mathf.Sqrt(vx + vz);
+            
+            if (vel < walking_velocity * Time.deltaTime / 4) {
+                // Add velocity - simulating acceleration
+                // Debug.Log("Going Slow");
+                claire_RB.velocity += movement / 10;
+
+            } else {
+                // set velocity
+                // Preserve the y-component (for jumping)
+                movement.y = claire_RB.velocity.y;
+                // Update the velocity
+                claire_RB.velocity = movement;
+            }
+
+            
+            
         }
 
         // Jump height as a vector
@@ -126,34 +148,45 @@ public class Claire : MonoBehaviour {
         }
         // Can add a different types of force (ForceMode): 
         // Force, Acceleration, Impulse, or VelocityChange
+
+
+
+        // Add acceleration in the movement direction
+        // Once (forward) velocity reaches a threshold set 
+        // 
+        // 
+        // 
+        // 
+        // 
     }
 
     // Update is called once per frame
     void Update()
-    {        
-        // Handles rotation / animations
-        // Also sets which movement keys are being pressed
-        HandleMovement();
+    {
+        if(!PauseScript.isPaused) {
+            // Get the relevant keys pressed to determine type of movement
+            jumping   = Input.GetKey(jumping_key);
+            running   = CheckKeys(running_keys);
+            forwards  = CheckKeys(forwards_keys);
+            backwards = CheckKeys(backwards_keys);
+            left      = CheckKeys(left_keys);
+            right     = CheckKeys(right_keys);
+            moving    = forwards || backwards || left || right;
+
+            // Play the sound if we're moving on the ground
+            if (moving && isGrounded() && !footsteps.isPlaying) {
+                footsteps.volume = Random.Range(0.8f, 1);
+                footsteps.pitch  = Random.Range(1.3f, 1.7f);
+                footsteps.Play();
+            }
+
+            // Rotates and animates the character based on which buttons are pressed
+            HandleAnimationAndRotation();
+        }
     }
 
     // Implements a more RPG style movement based on keyboard input
-    void HandleMovement() {
-        // NOTE: To make work with a character controller:
-            // Comment out calls to "HandleMovementRB()"
-            // Add a char. controller and disable the rigid body
-            // Uncomment all lines/blocks in "HandleMovement()" that use the variable "movement"
-
-
-        // Get the relevant keys pressed to determine type of movement
-        jumping   = Input.GetKey(jumping_key);
-        running   = CheckKeys(running_keys);
-        forwards  = running || CheckKeys(forwards_keys);
-        backwards = CheckKeys(backwards_keys);
-        left      = CheckKeys(left_keys);
-        right     = CheckKeys(right_keys);
-        moving    = forwards || backwards || left || right;
-
-        // Vector3 movement = new Vector3();
+    void HandleAnimationAndRotation() {
         Vector3 rotation = transform.rotation.eulerAngles;
         // Align the rotation with the camera, so we rotate/move relative to the camera
         rotation.y = _camera.transform.rotation.eulerAngles.y;
@@ -169,40 +202,18 @@ public class Claire : MonoBehaviour {
                 _camera.transform.parent = transform;
                 inventory.parent = transform;
             }
+        }
 
-            // determine the movement direction + speed
-            // movement = transform.forward * walking_velocity;
-
-            if (running) {
-                // running
-                animation_controller.SetInteger("state", states["runningForwards"]);
-                // movement *= 2;
-            } else {
-                // Walking
-                animation_controller.SetInteger("state", states["walkingForward"]);
-            }
-
-            // movement /= 10; //Debugging
+        // set the animation state
+        if (jumping) {
+            animation_controller.SetInteger("state", states["jumping"]);
+        } else if (running && moving) {
+            animation_controller.SetInteger("state", states["runningForwards"]);
+        } else if (moving) {
+            animation_controller.SetInteger("state", states["walkingForward"]);
         } else {
-            // Idle
             animation_controller.SetInteger("state", states["idle"]);
         }
-
-        if (jumping) {
-            // jumping gets precedence -> override the animation controller
-            animation_controller.SetInteger("state", states["jumping"]);
-        }
-
-        // Old code to handle jumps with a charcter controller:
-        // if (jumping && !animation_controller.GetCurrentAnimatorStateInfo(0).IsName("Jump")) {
-        //     movement += transform.up * jump_height;
-        //     animation_controller.SetInteger("state", states["jumping"]);
-        // } else {
-        //     movement -= transform.up / (jump_height * 2);
-        // }
-
-        // movement *= Time.deltaTime;
-        // character_controller.Move(movement);
 
     }
 

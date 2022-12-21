@@ -5,9 +5,9 @@ Tatyana:
 * ?
 
 Griffin:
-* Implemented BlockKeys.cs, TrollAI.cs, TrollMace.cs, keyslot.cs, door.cs (except lines 12,13,18,20,30–33,36), and block_enemies.cs (unused)
+* Implemented BlockKeys.cs, TrollAI.cs, TrollMace.cs, keyslot.cs, door.cs (except sound programmjng by Spencer on lines 12,13,18,20,30–33,36), and block_enemies.cs (unused)
 * Made geometry for keys, key slots, and doors.  
-* Configured NavMesh and NavMeshAgents
+* Configured NavMesh and NavMeshAgents (setting up physics and AI for enemies and their attacks)
 
 Spencer:
 * Worked on the Claire Gameobject, including the cameras and inventory objects, as well as the pause menu

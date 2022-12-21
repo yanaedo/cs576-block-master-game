@@ -2726,7 +2726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walking_velocity: 25
-  jump_height: 15
+  jump_height: 5
   _camera: {fileID: 47821701}
   inventory: {fileID: 2097398721}
   exclude_enemy_layermask:
@@ -2775,7 +2775,7 @@ Rigidbody:
   m_GameObject: {fileID: 447839754}
   serializedVersion: 2
   m_Mass: 10
-  m_Drag: 8
+  m_Drag: 1
   m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0

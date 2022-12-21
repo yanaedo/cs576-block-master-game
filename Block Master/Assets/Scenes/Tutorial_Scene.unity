@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.1802837, g: 0.22571404, b: 0.30692273, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1680,7 +1680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walking_velocity: 25
-  jump_height: 15
+  jump_height: 5
   _camera: {fileID: 2123164805}
   inventory: {fileID: 1448397216}
   exclude_enemy_layermask:
@@ -1825,7 +1825,7 @@ Rigidbody:
   m_GameObject: {fileID: 579037682}
   serializedVersion: 2
   m_Mass: 10
-  m_Drag: 8
+  m_Drag: 1
   m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -4525,6 +4525,7 @@ MonoBehaviour:
   _camera: {fileID: 2123164805}
   _key_camera: {fileID: 375253619}
   player: {fileID: 579037682}
+  held_object: {fileID: 0}
   exclude_enemy_layermask:
     serializedVersion: 2
     m_Bits: 951

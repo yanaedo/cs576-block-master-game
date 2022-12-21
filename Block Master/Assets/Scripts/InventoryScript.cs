@@ -8,6 +8,7 @@ public class InventoryScript : MonoBehaviour {
     public float pickup_force   = 50f;
     public float rotation_snap  = 45f; // 45 degrees = 8 positions per axis
     public float rotation_speed =  7f;
+    public float size_change = 0.85f;
     // TODO: Get this programatically - knowing Claire's hierarchy
     public Camera _camera;      // The main camera, behind Claire
     public Camera _key_camera;  // The camera pointed at the inventory/key
@@ -20,13 +21,12 @@ public class InventoryScript : MonoBehaviour {
     private GameObject held_object;                  // What is in the inventory
     private Rigidbody  held_object_RB;               // The inventory's rigid body
     private Transform  held_object_prev_parent;      // Keeps track of the key's position in the scene hierarchy
-    private KeyCode rotation_key, switch_camera_key; // Control keys
-    private bool cam_switched;  // Allows frame-buffering between button presses
+    private KeyCode switch_camera_key; // Control key
+    private bool    cam_switched;      // Allows frame-buffering between button presses
 
     // Used so player can pick up an object through the enemy barrier
     [SerializeField] private LayerMask exclude_enemy_layermask;
-
-    
+    private AudioSource key_pickup_SE;
 
 	// Use this for initialization
 	void Start ()
@@ -35,13 +35,14 @@ public class InventoryScript : MonoBehaviour {
         _key_camera.enabled = false;
 
         player_collider = player.GetComponent<Collider>();
+        key_pickup_SE = GetComponent<AudioSource>();
+
 
         // This script is attached to the (empty) inventory
         holdArea = transform;
         held_object = null;
 
-        // Controls
-        rotation_key = KeyCode.R;
+        // Camera Controls
         switch_camera_key   = KeyCode.C;
         cam_switched = false;
     }
@@ -49,40 +50,44 @@ public class InventoryScript : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        // Handle picking up (LeftClick), and dropping a key (RightClick)
-        if (Input.GetMouseButtonDown(0) && held_object == null) {
-            TryPickupKey();
-        } else if (Input.GetMouseButtonDown(1) && held_object != null) {
-            DropKey();
-        }
+        if(!PauseScript.isPaused) {
 
-        // Interact with the key - if we have one
-        if (held_object != null) {
-
-            // Make sure its in the desired position
-            if (held_object != null && Vector3.Distance(held_object.transform.position, holdArea.position) > 0.05f) {
-                Vector3 moveDirection = (holdArea.position - held_object.transform.position);
-                held_object_RB.AddForce(moveDirection * pickup_force);
-                // Debug.Log("Force Applied");
+            // Handle picking up (LeftClick), and dropping a key (RightClick)
+            if (Input.GetMouseButtonDown(0) && held_object == null) {
+                TryPickupKey();
+            } else if (Input.GetMouseButtonDown(1) && held_object != null) {
+                DropKey();
             }
 
-            // Let the player rotate it, or snap it into position
-            if (Input.GetKey(rotation_key)) {
-                HandleRotateKey();
-            } else {
-                SnapRotation();
-            }
+            // Interact with the key - if we have one
+            if (held_object != null) {
 
-            // Switch the camera (between character and key views) only if we have a key
-            // If the held_object is ever null, we force 3rd person view in DropKey()
-            if (Input.GetKey(switch_camera_key)) {
-                if (!cam_switched) {
-                    _camera.enabled = !_camera.enabled;
-                    _key_camera.enabled = !_key_camera.enabled;
-                    cam_switched = true;
+                // Make sure its in the desired position
+                if (held_object != null && Vector3.Distance(held_object.transform.position, holdArea.position) > 0.05f) {
+                    Vector3 moveDirection = (holdArea.position - held_object.transform.position);
+                    held_object_RB.AddForce(moveDirection * pickup_force);
+                    // Debug.Log("Force Applied");
                 }
-            } else {
-                cam_switched = false;
+
+                // Let the player rotate it, or snap it into position
+                if (Input.GetMouseButton(0)) {
+                    HandleRotateKey();
+                } else {
+                    SnapRotation();
+                }
+
+                // Switch the camera (between character and key views) only if we have a key
+                // If the held_object is ever null, we force 3rd person view in DropKey()
+                if (Input.GetKey(switch_camera_key)) {
+                    if (!cam_switched) {
+                        _camera.enabled = !_camera.enabled;
+                        _key_camera.enabled = !_key_camera.enabled;
+                        cam_switched = true;
+                    }
+                } else {
+                    cam_switched = false;
+                }
+
             }
 
         }
@@ -122,28 +127,31 @@ public class InventoryScript : MonoBehaviour {
                 // It occurs because it is trying to move to its designated position by going through her, rather than around 
                 Physics.IgnoreCollision(player_collider, pickup_obj.GetComponent<Collider>(), true);
 
-                // Griffin: disabling this because I want key to be same size as hole it's being lined up with
                 // Shrink the object when we pick it up - opposite of "grow" in DropKey()
-                Vector3 scale = held_object.transform.localScale;
-                held_object.transform.localScale = new Vector3(scale.x * 0.9f, scale.y * 0.9f, scale.z * 0.9f);
+                held_object.transform.localScale *= size_change;
+
+                // Play the sound
+                if (!key_pickup_SE.isPlaying) {
+                    key_pickup_SE.volume = Random.Range(0.6f, 0.8f);
+                    key_pickup_SE.pitch  = Random.Range(2.875f, 2.925f);
+                    key_pickup_SE.Play();
+                }
             }
         }
     }
 
     // Removes the key from inventory and resets its default values
-    void DropKey() {
+    public void DropKey() {
         held_object_RB.useGravity = true;
         held_object_RB.drag = 1;
         held_object_RB.constraints = RigidbodyConstraints.None;
         held_object_RB.transform.parent = held_object_prev_parent;
 
+        // Grow the object when we drop it - opposite of "shrink" in TryPickupKey()
+        held_object.transform.localScale /= size_change;
+
         // Now that we've dropped the key, resume collisions
         Physics.IgnoreCollision(player_collider, held_object.GetComponent<Collider>(), false);
-
-        // Grow the object when we drop it - opposite of "shrink" in TryPickupKey()
-        Vector3 scale = held_object.transform.localScale;
-        held_object.transform.localScale = new Vector3(scale.x / 0.9f, scale.y / 0.9f, scale.z / 0.9f);
-        
         held_object = null;
 
         // Enforce 3rd person view
@@ -156,11 +164,6 @@ public class InventoryScript : MonoBehaviour {
         float forward = Input.GetAxis("Mouse Y");
         float right   = Input.GetAxis("Mouse X");
         execute_key_rotation( new Vector3(forward, 0, -right) * rotation_speed);
-
-        // Alt approach (didn't work for some reason):
-        // https://docs.unity3d.com/ScriptReference/Rigidbody.AddTorque.html
-        // held_object_RB.AddTorque(rotation, ForceMode.Impulse);
-        // ForceMode: Force, Acceleration, Impulse, VelocityChange
     }
 
     // Rotates the key around the holdArea
@@ -174,9 +177,11 @@ public class InventoryScript : MonoBehaviour {
         held_object.transform.RotateAround(pos, y_axis, rotation.y);
         held_object.transform.RotateAround(pos, z_axis, rotation.z);
 
-        // Alt. approach
+        // Alt. approaches
         // This line functioned, but would only rotate [-90, 90], not continously
         // held_object.transform.localEulerAngles += rotation;
+        // 
+        // Or could use held_object_RB.AddTorque()
     }
 
     // Snap the held object to certain angles (based off of rotation_snap)
@@ -194,7 +199,7 @@ public class InventoryScript : MonoBehaviour {
 
         float finalAngle = Mathf.MoveTowardsAngle(curAngle, newAngle, 8 * rotation_speed * Time.deltaTime);
 
-        return (delta < 0.1) ? curAngle : finalAngle;
+        return (delta < 0.05) ? curAngle : finalAngle;
     }
 
 }

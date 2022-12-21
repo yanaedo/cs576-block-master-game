@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 16b1df49aac6b4e43ae45a0bf91bead2
   - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 97e31d077f20be3448b3be179ff25ed9
+  - enabled: 1
     path: Assets/Scenes/LostGameMenu.unity
     guid: da7e7894dc0e51c46bd2a566f888e758
   - enabled: 1

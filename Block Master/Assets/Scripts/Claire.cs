@@ -194,13 +194,13 @@ public class Claire : MonoBehaviour {
         if (moving) {
             // HACKY: set the rotation (w/o rotating the camera or inventory)
             if (!animation_controller.GetCurrentAnimatorStateInfo(0).IsName("Jump")) {
-                inventory.parent = null;
+                // inventory.parent = null; // Prevents inventory from rotating with the camera
                 _camera.transform.parent = null;
 
                 transform.eulerAngles = getRotation(rotation);
 
                 _camera.transform.parent = transform;
-                inventory.parent = transform;
+                // inventory.parent = transform;
             }
         }
 

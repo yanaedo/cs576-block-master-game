@@ -59,6 +59,11 @@ public class FollowCharacter : MonoBehaviour
                 transform.eulerAngles = character.transform.eulerAngles + relativeAngle;
 
                 cam_was_reset = true;
+
+                // TODO
+                // Problem,  key can clip through barriers/walls
+                // Solution, Raycast the held items cur/future position
+                // If it hits a wall/key blocker, call drop key
             }   
         } else {
             cam_was_reset = false;

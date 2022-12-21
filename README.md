@@ -10,7 +10,7 @@ Tatyana:
 Griffin:
 * Implemented BlockKeys.cs, TrollAI.cs, TrollMace.cs, keyslot.cs, door.cs (except sound programmjng by Spencer on lines 12,13,18,20,30–33,36), and block_enemies.cs (unused)
 * Made geometry for keys, key slots, and doors.  
-* Configured NavMesh and NavMeshAgents (setting up physics and AI for enemies and their attacks)
+* Created and configured NavMesh and NavMeshAgents (setting up physics and AI for enemies and their attacks)
 
 Spencer:
 * Worked on the Claire Gameobject, including the cameras and inventory objects, as well as the pause menu
@@ -28,7 +28,7 @@ Spencer:
 * The "success" sound clip https://freesound.org/people/grunz/sounds/109662/
 
 * Treasure chest prefab: https://assetstore.unity.com/packages/3d/props/interior/treasure-set-free-chest-72345
-* Troll/ogre (enemy) prefab: https://assetstore.unity.com/packages/3d/characters/creatures/creature-cave-troll-115707
+* Troll/ogre (enemy) model and animations: https://assetstore.unity.com/packages/3d/characters/creatures/creature-cave-troll-115707
 * Torch prefab: https://assetstore.unity.com/packages/3d/environments/historic/historic-environment-142116
 * Ground and roof texture: https://assetstore.unity.com/packages/2d/textures-materials/floors/pbr-ground-materials-1-dirt-grass-85402
 * Wall texture: https://assetstore.unity.com/packages/2d/textures-materials/brick/tileable-bricks-wall-24530

@@ -29,12 +29,6 @@ public class UIManager : MonoBehaviour
         settingsDialog.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void showDialog(GameObject dialog)
     {
         dialog.SetActive(!dialog.activeSelf);

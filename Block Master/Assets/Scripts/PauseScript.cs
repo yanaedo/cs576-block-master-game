@@ -38,7 +38,7 @@ public class PauseScript : MonoBehaviour
     }
 
     public void LoadMenu() {
-        // Load the 
+        Resume();
         SceneManager.LoadScene("MainMenu");
     }
 }

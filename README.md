@@ -35,5 +35,5 @@ Spencer:
 * Door texture: https://assetstore.unity.com/packages/2d/textures-materials/free-sample-materials-112184
 * Keyhole structure texture: https://assetstore.unity.com/packages/2d/textures-materials/wood/mc-old-wod-free-sample-178802
 
-* The fire particle system for the torches was taken from [https://www.mediafire.com/file/5v3mlk7p5pqp1r1/08_Basics_Fire.unitypackage](https://www.youtube.com/watch?v=5Mw6NpSEb2o&t=4s)
+* The fire particle system for the torches was taken from https://www.youtube.com/watch?v=5Mw6NpSEb2o&t=4s
 * The script FlickeringLight.cs which adds flickering lights to the fire was taken from https://assetstore.unity.com/packages/tools/particles-effects/flickering-light-effect-57324#content

@@ -16,6 +16,9 @@ public class FollowCharacter : MonoBehaviour
     private float rel_back;   // delta z
     private bool cam_was_reset;
 
+    // when resetting the camera, moves the inventory location but not the held item
+    public GameObject inventory;
+    private InventoryScript inventory_script;
 
     // Start is called before the first frame update
     void Start()
@@ -29,44 +32,73 @@ public class FollowCharacter : MonoBehaviour
         rel_back   = relativePosition.z;
 
         cam_was_reset = false;
+
+        inventory_script = inventory.GetComponent<InventoryScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         if (PauseScript.isPaused) {
             // Do nothing if paused
 
         // Rotate camera left
         } else if (Input.GetKey(KeyCode.Q)) {
-            transform.RotateAround(character.transform.position, up, -turn_speed * Time.deltaTime);
+            rotate_camera(-turn_speed);
 
         // Rotate camera right
         } else if (Input.GetKey(KeyCode.E)) {
-            transform.RotateAround(character.transform.position, up, turn_speed * Time.deltaTime);
+            rotate_camera(turn_speed);
 
         // Reset the camera to over Claire's shoulder
         } else if (Input.GetKey(KeyCode.X)) {
             if (!cam_was_reset) {
-                Vector3 new_position = character.transform.position;
-                new_position += rel_offset * character.transform.right;   // 'x'
-                new_position += rel_height * character.transform.up;      // 'y'
-                new_position += rel_back   * character.transform.forward; // 'z'
-
-                // update the position + angle
-                transform.position = new_position;
-                transform.eulerAngles = character.transform.eulerAngles + relativeAngle;
-
-                cam_was_reset = true;
-
-                // TODO
-                // Problem,  key can clip through barriers/walls
-                // Solution, Raycast the held items cur/future position
-                // If it hits a wall/key blocker, call drop key
+                reset_camera();
             }   
         } else {
             cam_was_reset = false;
         }
+    }
+
+    void rotate_camera(float base_speed) {
+        // If the player is running, the camera will rotate faster
+        if (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift)) {
+            base_speed *= 1.2f;
+        }
+        transform.RotateAround(character.transform.position, up, base_speed * Time.deltaTime);
+    }
+
+    void reset_camera() {
+        // Get the new position of the camera
+        Vector3 new_position = character.transform.position;
+        new_position += rel_offset * character.transform.right;   // 'x'
+        new_position += rel_height * character.transform.up;      // 'y'
+        new_position += rel_back   * character.transform.forward; // 'z'
+
+
+        // Store info about the held_object (if we have one)
+        // The way we do reset the camera, the inventory can clip out of bounds
+        // We mess with the held_object so that the keys don't do the same 
+        Vector3 child_angles = new Vector3();
+        Transform last_parent = null;
+        if (inventory_script.held_object != null) {
+            child_angles = inventory_script.held_object.transform.localEulerAngles;
+            last_parent = inventory_script.held_object.transform.parent;
+
+            inventory_script.held_object.transform.parent = null;
+        }
+
+        // update the position + angle of the camera
+        transform.position = new_position;
+        transform.eulerAngles = character.transform.eulerAngles + relativeAngle;
+
+        // Now that the camera (+ inventory location) have moved
+        // Restore the relationship with the held_object (key).
+        if (inventory_script.held_object != null) {
+            inventory_script.held_object.transform.parent = last_parent;
+            inventory_script.held_object.transform.localEulerAngles = child_angles;
+        }
+
+        cam_was_reset = true;
     }
 }

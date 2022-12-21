@@ -45,7 +45,7 @@ public class InventoryScript : MonoBehaviour {
         held_object = null;
 
         // Camera Controls
-        switch_camera_key   = KeyCode.C;
+        switch_camera_key = KeyCode.C;
         cam_switched = false;
     }
 
@@ -113,7 +113,6 @@ public class InventoryScript : MonoBehaviour {
         // Following this tutorial: https://www.youtube.com/watch?v=6bFCQqabfzo
 
         // Construct a ray from the current mouse coordinates
-        // Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         Ray ray;
         if (using_main_camera) {
             ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -127,37 +126,41 @@ public class InventoryScript : MonoBehaviour {
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, exclude_enemy_layermask)) {
             Transform  location   = hit.transform;
             GameObject pickup_obj = location.gameObject;
-            Rigidbody  pickup_rb  = pickup_obj.GetComponent<Rigidbody>();
 
             bool in_range = Vector3.Distance(transform.position, location.position) < pickup_range;
             bool is_key   = pickup_obj.tag.ToLower().Contains("key");
-            bool has_rb   = pickup_rb != null;  // Makes sure the key has an RB component so we don't error
+            // Makes sure the key has an RB component so we don't error
+            bool has_rb   = pickup_obj.GetComponent<Rigidbody>() != null;
 
             // If we've hit a key, pick it up
             if (in_range && is_key && has_rb) {
-                held_object_RB = pickup_obj.GetComponent<Rigidbody>();
-                held_object_RB.useGravity = false;
-                held_object_RB.drag = 10;
-                held_object_RB.constraints = RigidbodyConstraints.FreezeRotation; // Prevents unwanted rotations
-                held_object_prev_parent = held_object_RB.transform.parent;
-                held_object_RB.transform.parent = holdArea;
-                held_object = pickup_obj;
-
-                // Ignore collision with the key once we've picked it up.
-                // **This prevents a bug where the key will push Claire**
-                // It occurs because it is trying to move to its designated position by going through her, rather than around 
-                Physics.IgnoreCollision(player_collider, pickup_obj.GetComponent<Collider>(), true);
-
-                // Shrink the object when we pick it up - opposite of "grow" in DropKey()
-                held_object.transform.localScale *= size_change;
-
-                // Play the sound
-                if (!key_pickup_SE.isPlaying) {
-                    key_pickup_SE.volume = Random.Range(0.6f, 0.8f);
-                    key_pickup_SE.pitch  = Random.Range(2.875f, 2.925f);
-                    key_pickup_SE.Play();
-                }
+                PickupKey(pickup_obj);
             }
+        }
+    }
+
+    void PickupKey(GameObject pickup_obj) {
+        held_object_RB = pickup_obj.GetComponent<Rigidbody>();
+        held_object_RB.useGravity = false;
+        held_object_RB.drag = 10;
+        held_object_RB.constraints = RigidbodyConstraints.FreezeRotation; // Prevents unwanted rotations
+        held_object_prev_parent = held_object_RB.transform.parent;
+        held_object_RB.transform.parent = holdArea;
+        held_object = pickup_obj;
+
+        // Ignore collision with the key once we've picked it up.
+        // **This prevents a bug where the key will push Claire**
+        // It occurs because it is trying to move to its designated position by going through her, rather than around 
+        Physics.IgnoreCollision(player_collider, pickup_obj.GetComponent<Collider>(), true);
+
+        // Shrink the object when we pick it up - opposite of "grow" in DropKey()
+        held_object.transform.localScale *= size_change;
+
+        // Play the sound
+        if (!key_pickup_SE.isPlaying) {
+            key_pickup_SE.volume = Random.Range(0.6f, 0.8f);
+            key_pickup_SE.pitch  = Random.Range(2.875f, 2.925f);
+            key_pickup_SE.Play();
         }
     }
 
@@ -224,7 +227,7 @@ public class InventoryScript : MonoBehaviour {
 
         float finalAngle = Mathf.MoveTowardsAngle(curAngle, newAngle, 8 * rotation_speed * Time.deltaTime);
 
-        return (delta < 0.05) ? curAngle : finalAngle;
+        return (delta < 0.01) ? curAngle : finalAngle;
     }
 
 }

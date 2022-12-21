@@ -12,7 +12,6 @@ public class Claire : MonoBehaviour {
     public Transform inventory; // Where the key will be placed
     
     private Animator animation_controller;
-    private CharacterController character_controller;
     private Dictionary<string, int> states; // animation states
     private Rigidbody claire_RB;
 
@@ -34,7 +33,6 @@ public class Claire : MonoBehaviour {
         
         footsteps = GetComponent<AudioSource>();
         animation_controller = GetComponent<Animator>();
-        character_controller = GetComponent<CharacterController>();
 
         claire_RB = gameObject.GetComponent(typeof(Rigidbody)) as Rigidbody;
         if (claire_RB == null) {
@@ -42,6 +40,7 @@ public class Claire : MonoBehaviour {
         }
 
         // Set the center of mass height to 0
+        // Prevents Claire from falling over
         Vector3 CoM = claire_RB.centerOfMass;
         CoM.y = 0;
         claire_RB.centerOfMass = CoM;
@@ -63,6 +62,8 @@ public class Claire : MonoBehaviour {
         right_keys     = new KeyCode[] {KeyCode.RightArrow, KeyCode.D};
         running_keys   = new KeyCode[] {KeyCode.RightShift, KeyCode.LeftShift};
 
+        // Set only in Update()
+        // Read in both Update() and FixedUpdate()
         forwards  = false;
         backwards = false;
         left      = false;
@@ -98,14 +99,12 @@ public class Claire : MonoBehaviour {
                     movement *= 0.6f;
                 }
             } else {
-                // Player can rotate, so just move forward
+                // Player can freely rotate, so just move forward
                 movement = walking_velocity * transform.forward;
             }
 
             // Make them faster if they're running
-            if (running) {
-                movement *= 2;
-            }
+            if (running) { movement *= 2; }
 
             // Make movement proportional to the elapsed time
             movement *= Time.deltaTime;
@@ -127,11 +126,8 @@ public class Claire : MonoBehaviour {
                 movement.y = claire_RB.velocity.y;
                 // Update the velocity
                 claire_RB.velocity = movement;
-            }
-
-            
-            
-        }
+            }  
+        } // end: if (moving)
 
         // Jump height as a vector
         Vector3 height = transform.up * jump_height * Time.deltaTime;
@@ -145,10 +141,17 @@ public class Claire : MonoBehaviour {
         } else if (jumping) {
             // VelocityChange makes the jumps more satisfying
             claire_RB.AddForce(height, ForceMode.VelocityChange);
+        
+        // Add a deceleration force if coming to a standstill
+        // standstill = not actively moving, not jumping, but still have some velocity
+        } else if (!moving && !animation_controller.GetCurrentAnimatorStateInfo(0).IsName("Jump") && claire_RB.velocity.magnitude > 1) {
+            // Debug.Log(claire_RB.velocity);
+            Vector3 backward = -transform.forward * walking_velocity * Time.deltaTime;
+            claire_RB.AddForce(0.8f * backward, ForceMode.Acceleration);
         }
+
         // Can add a different types of force (ForceMode): 
         // Force, Acceleration, Impulse, or VelocityChange
-
     }
 
     // Update is called once per frame
@@ -166,7 +169,7 @@ public class Claire : MonoBehaviour {
 
             // Play the sound if we're moving on the ground
             if (moving && isGrounded() && !footsteps.isPlaying) {
-                footsteps.volume = Random.Range(0.8f, 1);
+                footsteps.volume = Random.Range(0.85f, 1);
                 footsteps.pitch  = Random.Range(1.3f, 1.7f);
                 footsteps.Play();
             }

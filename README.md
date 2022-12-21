@@ -19,7 +19,7 @@ Spencer:
 
 
 
-## Assets
+## Assets and References
 * The Claire prefab is based on the one used in class for homework assignment 3.
 
 * The BGM "Bog Creatures On the Move" uses a Soundimage International Public License and is available royalty free from: https://soundimage.org/fantasywonder/
@@ -39,6 +39,8 @@ Spencer:
 * The script FlickeringLight.cs which adds flickering lights to the fire was taken from https://assetstore.unity.com/packages/tools/particles-effects/flickering-light-effect-57324#content
 
 
+* Key pickup system referenced the tutorial "PICKUP & DROP Physics Objects in Unity (Like PORTAL)": https://www.youtube.com/watch?v=6bFCQqabfzo
 
-## Tutorial Followed
-* PICKUP & DROP Physics Objects in Unity (Like PORTAL): https://www.youtube.com/watch?v=6bFCQqabfzo
+ * Navigation setup referenced this tutorial: https://docs.unity3d.com/Manual/nav-BuildingNavMesh.html https://docs.unity3d.com/Manual/nav-CreateNavMeshAgent.html (as well as the API documentation linked below, i.e. https://docs.unity3d.com/ScriptReference/AI.NavMeshAgent.html and https://docs.unity3d.com/ScriptReference/AI.NavMeshPath.html)
+* Key and slot geometry made using ProBuilder (part of the Unity Registry in the Package Manager) and referencing Unity's manual for ProBuilder: https://docs.unity3d.com/Packages/com.unity.probuilder@4.0/manual/index.html https://docs.unity3d.com/Packages/com.unity.probuilder@4.0/manual/Edge_FillHole.html https://docs.unity3d.com/Packages/com.unity.probuilder@4.0/manual/Edge_Bridge.html
+* Other information referenced from the official Unity Scripting API documentation: https://docs.unity3d.com/ScriptReference/

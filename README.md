@@ -4,7 +4,7 @@
 Tatyana:
 * Wrote UIManager.cs, ChangeScenes.cs, and WhenTreasureFound.cs
 * Created the dungeon including adding textures and props
-* Created the the MainMenu, Level1, and WonGameMenu scenes
+* Created the MainMenu, Level1, and WonGameMenu scenes
 * Added sound to the treasure chest
 
 Griffin:

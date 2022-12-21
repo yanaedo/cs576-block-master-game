@@ -25,7 +25,7 @@ Spencer:
 * The BGM "Bog Creatures On the Move" uses a Soundimage International Public License and is available royalty free from: https://soundimage.org/fantasywonder/
 * The "Grass 1 22" AudioSource (footsteps sound) is from the Footstep(Snow and Grass) pack by MGWSoundDesign available on the Unity Asset Store.
 * The "vibe2" AudioSource was sampled from Yu Yeonjoo's performance of Jan Freicher's "Soaring in the sky" (https://www.youtube.com/watch?v=aVL_pdrqX0A)
-* The "success" sound clip 
+* The "success" sound clip https://freesound.org/people/grunz/sounds/109662/
 
 * Treasure chest prefab: https://assetstore.unity.com/packages/3d/props/interior/treasure-set-free-chest-72345
 * Troll/ogre (enemy) prefab: https://assetstore.unity.com/packages/3d/characters/creatures/creature-cave-troll-115707
